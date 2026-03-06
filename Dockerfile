@@ -51,6 +51,7 @@ COPY --from=builder /usr/lib/swift/linux/*.so /usr/lib/swift/linux/
 # Copy model and config files
 COPY labels.txt /app/
 COPY streams.json /app/
+COPY yolo11n.onnx /app/
 
 # TensorRT + CUDA libraries are mounted from the host via CDI
 ENV LD_LIBRARY_PATH=/usr/lib/swift/linux:/opt/nvidia/deepstream/deepstream-7.1/lib:/usr/local/cuda-12.6/lib:/usr/lib/aarch64-linux-gnu
