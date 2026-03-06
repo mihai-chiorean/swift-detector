@@ -20,7 +20,9 @@ COPY Sources/ Sources/
 RUN swift package resolve
 
 # Build release binary
-RUN swift build -c release --scratch-path /tmp/.build
+# Set LD_LIBRARY_PATH to include CUDA libraries during build
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+RUN swift build -c release --scratch-path /tmp/.build -Xlinker -L/usr/local/cuda/lib64
 
 # Stage 2: Minimal runtime image
 FROM ubuntu:24.04
