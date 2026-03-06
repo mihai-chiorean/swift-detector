@@ -21,8 +21,11 @@ RUN swift package resolve
 
 # Build release binary
 # Set LD_LIBRARY_PATH to include CUDA libraries during build
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
-RUN swift build -c release --scratch-path /tmp/.build -Xlinker -L/usr/local/cuda/lib64
+# The l4t-jetpack image has CUDA libs in /usr/local/cuda/lib64 (stubs for build time)
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/lib64/stubs:/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
+RUN swift build -c release --scratch-path /tmp/.build \
+    -Xlinker -L/usr/local/cuda/lib64/stubs \
+    -Xlinker -lcuda
 
 # Stage 2: Minimal runtime image
 FROM ubuntu:24.04
