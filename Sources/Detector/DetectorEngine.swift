@@ -69,7 +69,7 @@ actor DetectorEngine {
 
     // MARK: Private properties
 
-    private let logger: Logger
+    private let logger: Logging.Logger
 
     /// Maximum batch size the engine was built for.
     private let maxBatchSize: Int
@@ -107,7 +107,8 @@ actor DetectorEngine {
                 "path": "\(ep)",
             ])
             do {
-                loadedEngine = try runtime.deserializeEngine(from: ep)
+                let engineData = try Data(contentsOf: URL(fileURLWithPath: ep))
+                loadedEngine = try runtime.deserializeEngine(from: engineData)
             } catch {
                 throw DetectorError.engineLoadFailed(
                     "Failed to deserialise engine at \(ep): \(error)"
